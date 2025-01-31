@@ -11,6 +11,7 @@ def generate_search_queries_prompt(
     report_type: str,
     max_iterations: int = 3,
     context: List[Dict[str, Any]] = [],
+    language: str = "english",
 ):
     """Generates the search queries prompt for the given question.
     Args:
@@ -46,6 +47,7 @@ Assume the current date is {datetime.now(timezone.utc).strftime('%B %d, %Y')} if
 
 {context_prompt}
 You must respond with a list of strings in the following format: [{dynamic_example}].
+You should write the queries mainly in the following language: {language}.
 The response should contain ONLY the list.
 """
 
@@ -141,7 +143,7 @@ The response MUST not contain any markdown format or additional text (like ```js
 
 
 def generate_resource_report_prompt(
-    question, context, report_source: str, report_format="apa", tone=None, total_words=1000, language=None
+    question, context, report_source: str, report_format="apa", tone=None, total_words=1000, language="english"
 ):
     """Generates the resource report prompt for the given question and research summary.
 
@@ -172,6 +174,7 @@ def generate_resource_report_prompt(
         "Ensure that the report is well-structured, informative, in-depth, and follows Markdown syntax.\n"
         "Include relevant facts, figures, and numbers whenever available.\n"
         f"The report should have a minimum length of {total_words} words.\n"
+        f"You MUST write the report in the following language: {language}.\n"
         "You MUST include all relevant source urls."
         "Every url should be hyperlinked: [url website](url)"
         f"{reference_prompt}"
@@ -404,7 +407,7 @@ Assume that the current date is {datetime.now(timezone.utc).strftime('%B %d, %Y'
 """
 
 
-def generate_report_conclusion(query: str, report_content: str) -> str:
+def generate_report_conclusion(query: str, report_content: str, language: str = "english") -> str:
     """
     Generate a concise conclusion summarizing the main findings and implications of a research report.
 
@@ -426,7 +429,9 @@ def generate_report_conclusion(query: str, report_content: str) -> str:
     2. Highlight the most important findings
     3. Discuss any implications or next steps
     4. Be approximately 2-3 paragraphs long
-    
+
+    You must write the conclusion in the following language: {language}.
+
     If there is no "## Conclusion" section title written at the end of the report, please add it to the top of your conclusion. 
     You must include hyperlinks with markdown syntax ([url website](url)) related to the sentences wherever necessary.
     
@@ -457,4 +462,3 @@ def get_prompt_by_report_type(report_type):
         )
         prompt_by_type = report_type_mapping.get(default_report_type)
     return prompt_by_type
-

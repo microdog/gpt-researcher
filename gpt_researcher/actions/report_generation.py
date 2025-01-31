@@ -85,7 +85,7 @@ async def write_conclusion(
             model=config.smart_llm_model,
             messages=[
                 {"role": "system", "content": f"{agent_role_prompt}"},
-                {"role": "user", "content": generate_report_conclusion(query, context)},
+                {"role": "user", "content": generate_report_conclusion(query, context, language=config.language)},
             ],
             temperature=0.25,
             llm_provider=config.smart_llm_provider,

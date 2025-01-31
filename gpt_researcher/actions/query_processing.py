@@ -49,7 +49,8 @@ async def generate_sub_queries(
         parent_query,
         report_type,
         max_iterations=cfg.max_iterations or 1,
-        context=context
+        context=context,
+        language=cfg.language,
     )
 
     try:

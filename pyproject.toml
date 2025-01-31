@@ -44,6 +44,7 @@ loguru = "^0.7.2"
 websockets = "^13.1"
 ftfy = "^6.3.1"
 charset-normalizer = "^3.4.1"
+simsimd = "^6.2.1"
 
 [build-system]
 requires = ["poetry-core"]

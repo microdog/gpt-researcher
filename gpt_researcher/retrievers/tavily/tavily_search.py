@@ -3,6 +3,7 @@
 # libraries
 import os
 from typing import Literal, Sequence, Optional
+import ftfy
 import requests
 import json
 
@@ -98,7 +99,7 @@ class TavilySearch():
                 raise Exception("No results found with Tavily API search.")
             # Return the results
             search_response = [{"href": obj["url"],
-                                "body": obj["content"]} for obj in sources]
+                                "body": ftfy.fix_encoding(obj["content"])} for obj in sources]
         except Exception as e:
             print(
                 f"Error: {e}. Failed fetching sources. Resulting in empty response.")

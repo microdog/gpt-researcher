@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 import os
+
+import charset_normalizer
+import ftfy
 from ..utils import get_relevant_images, extract_title
 
 class TavilyExtract:
@@ -42,12 +45,17 @@ class TavilyExtract:
 
             # Parse the HTML content of the response to create a BeautifulSoup object for the utility functions
             response_bs = self.session.get(self.link, timeout=4)
+            if response_bs.encoding is None or response_bs.encoding == "ISO-8859-1":
+                response_bs.encoding = charset_normalizer.detect(response_bs.content)["encoding"]
             soup = BeautifulSoup(
                 response_bs.content, "lxml", from_encoding=response_bs.encoding
             )
 
             # Since only a single link is provided to tavily_client, the results will contain only one entry.
             content = response['results'][0]['raw_content']
+
+            # Try to fix encoding issues
+            content = ftfy.fix_encoding(content)
 
             # Get relevant images using the utility function
             image_urls = get_relevant_images(soup, self.link)
